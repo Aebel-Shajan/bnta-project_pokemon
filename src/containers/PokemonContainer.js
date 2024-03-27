@@ -8,6 +8,18 @@ const PokemonContainer = () => {
     const [pokemons, setPokemons] = useState([]);
     const [filteredPokemons, setFilteredPokemons] = useState([]);
 
+const loadPokemon = async () => {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon");
+  const jsonData = await response.json();
+  setPokemons(jsonData);
+}
+
+useEffect(() => {
+  loadPokemon()
+}, []);
+
+
+
 return (
     <div>
       <h1>Pokedex</h1>
