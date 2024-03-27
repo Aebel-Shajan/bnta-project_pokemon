@@ -1,4 +1,5 @@
 import React from "react";
+import './Pokemon.css';
 
 const Pokemon = ({ pokemon }) => {
 
@@ -9,8 +10,9 @@ const Pokemon = ({ pokemon }) => {
     return <li>{move}</li>
   })
 
+
   return (
-    <div >
+    <div className="PokemonCard">
       <h3>{pokemon.name}</h3>
       <p>Stat: {pokemon.baseStat}</p>
       <img alt="pokemon" src={pokemon.imageSrc} />
@@ -18,10 +20,11 @@ const Pokemon = ({ pokemon }) => {
       <p>Types</p>
       <ul>
         {typesElements}
+
       </ul>
       
       <p>Moves</p>
-      <ul>
+      <ul className="PokemonMoves">
         {movesElements.slice(0, 4)}
       </ul>
       

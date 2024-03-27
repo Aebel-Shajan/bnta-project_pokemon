@@ -1,4 +1,7 @@
+
 import { useState } from "react";
+import './Pokemon.css';
+
 
 const PokemonForm = ({ handleForm, types }) => {
     const [search, setSearch] = useState("");
