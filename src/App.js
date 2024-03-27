@@ -1,6 +1,6 @@
 import React from "react";
-import PokemonContainer from "./Container/PokemonContainer";
 import './App.css';
+import PokemonContainer from "./containers/PokemonContainer";
 
 function App() {
   return (
