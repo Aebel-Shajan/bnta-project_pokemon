@@ -9,9 +9,10 @@ const PokemonContainer = () => {
     const [filteredPokemons, setFilteredPokemons] = useState([]);
 
 const loadPokemon = async () => {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon");
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon?offset=0&limit=100");
   const jsonData = await response.json();
-  setPokemons(jsonData);
+  setPokemons(jsonData["results"]);
+  setFilteredPokemons(jsonData["results"]);
 }
 
 useEffect(() => {
