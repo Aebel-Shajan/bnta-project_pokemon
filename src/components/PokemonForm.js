@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const PokemonForm = (event) => {
+const PokemonForm = ({handleSearch}) => {
    const [search, setSearch] = useState("");
     
     const handleChange = (event) => {
@@ -8,8 +8,11 @@ const PokemonForm = (event) => {
     }
 
     const handleSubmit = (event) => {
-        
+        event.preventDefault();
+        handleSearch(search.toLowerCase());
     }
+
+  
 
 
     return ( 

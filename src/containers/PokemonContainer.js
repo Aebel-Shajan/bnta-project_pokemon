@@ -19,12 +19,20 @@ useEffect(() => {
   loadPokemon()
 }, []);
 
+const handleSubmit = (search) => {
+    const filtered = pokemons.filter(
+        (pokemon) => {
+        pokemon.name.includes(search)
+    }
+    ) 
+    setFilteredPokemons(filtered);
+};
 
 
 return (
     <div>
       <h1>Pokedex</h1>
-      <PokemonForm />
+      <PokemonForm handleSearch={handleSubmit}/>
       <PokemonList pokemons={filteredPokemons} />
     </div>
   );
