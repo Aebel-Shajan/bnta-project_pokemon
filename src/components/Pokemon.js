@@ -2,25 +2,25 @@ import React from "react";
 import './Pokemon.css';
 
 const Pokemon = ({ pokemon }) => {
-  const pokemonTypes = pokemon.types;
-  const pokemonMoves = pokemon.moves;
-  
-  const typesElements = pokemonTypes.map((type, index) => {
-    return <li key={index}>{type.type.name}</li>;
-  });
-  const movesElements = pokemonMoves.map((move, index) => {
-    return <li key={index}>{move.move.name}</li>;
-  });
+
+  const typesElements = pokemon.types.map((type, index) => {
+    return <li>{type}</li>
+  })
+  const movesElements = pokemon.moves.map((move, index) => {
+    return <li>{move}</li>
+  })
+
 
   return (
     <div className="PokemonCard">
       <h3>{pokemon.name}</h3>
-      <p>Stat: {pokemon.stats[0].base_stat}</p>
-      <img className="PokemonImage" alt="pokemon" src={pokemon.sprites.front_default} />
+      <p>Stat: {pokemon.baseStat}</p>
+      <img alt="pokemon" src={pokemon.imageSrc} />
       
       <p>Types</p>
-      <ul className="PokemonTypes">
-        {typesElements.slice(0, 4)}
+      <ul>
+        {typesElements}
+
       </ul>
       
       <p>Moves</p>

@@ -2,46 +2,79 @@ import React, { useState, useEffect } from "react";
 import PokemonList from "../components/PokemonList";
 import PokemonForm from "../components/PokemonForm";
 
-const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
 const PokemonContainer = () => {
-  const [pokemons, setPokemons] = useState([]);
-  const [filteredPokemons, setFilteredPokemons] = useState([]);
+  const [pokemonList, setPokemonList] = useState([]);
+  const [filteredPokemonList, setFilteredPokemonList] = useState([]);
+  const [types, setTypes] = useState([]);
 
-  const loadPokemon = async () => {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon?offset=0&limit=10");
-    const jsonData= await response.json();
-    const pokemonJsonList = jsonData["results"];
-    console.log(pokemonJsonList);
-    let pokemonList = [];
-    for (let i = 0; i < pokemonJsonList.length; i++ ) {
-      const pokemonResponse = await fetch(pokemonJsonList[i]["url"]);
-      const pokemonInfo = await pokemonResponse.json();
-      pokemonList.push(pokemonInfo);
+  // Load a pokemon object from api
+  const loadPokemon = async (pokemonUrl) => {
+    const pokemonResponse = await fetch(pokemonUrl);
+    const pokemon = await pokemonResponse.json();
+    const moves = pokemon.moves.map((move) => {
+      return move.move.name;
+    })
+    const types = pokemon.types.map((type) => {
+      return type.type.name;
+    })
+    const pokemonObject = {
+      name: pokemon.name,
+      moves: moves,
+      types: types,
+      baseStat: pokemon.stats[0].base_stat,
+      imageSrc: pokemon.sprites.front_default
     }
-    setPokemons(pokemonList);
-    setFilteredPokemons(pokemonList);
+    return pokemonObject;
+  }
+
+  // Load a list of pokemon objects from url
+  const loadPokemonList = async () => {
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?offset=0&limit=100");
+    const jsonData = await response.json();
+    const pokemonJsonList = jsonData["results"];
+    let pokemonListTemp = [];
+    for (let i = 0; i < pokemonJsonList.length; i++) {
+      const pokemonObject = await loadPokemon(pokemonJsonList[i]["url"]);
+      pokemonListTemp.push(pokemonObject);
+    }
+    setPokemonList(pokemonListTemp);
+    setFilteredPokemonList(pokemonListTemp);
+  }
+
+  // Load types from api
+  const loadTypes = async () => {
+    const response = await fetch("https://pokeapi.co/api/v2/type");
+    const jsonData = await response.json();
+    const typesList = jsonData["results"].map(element => element.name);
+    setTypes(typesList);
+    console.log(typesList);
   }
 
   useEffect(() => {
-    loadPokemon()
+    loadPokemonList();
+    loadTypes();
   }, []);
 
-  const handleSubmit = (search) => {
-    const filtered = pokemons.filter(
+
+  const handleForm= (search, typeFilter) => {
+    const filtered = pokemonList.filter(
       (pokemon) => {
-        return pokemon.name.includes(search)
+        if (typeFilter === "all-types") {
+          return pokemon.name.includes(search)
+        }
+        return pokemon.name.includes(search) && pokemon.types.includes(typeFilter);
       }
     );
-    setFilteredPokemons(filtered);
+    setFilteredPokemonList(filtered);
   };
 
 
   return (
     <div>
       <h1>Pokedex</h1>
-      <PokemonForm handleSearch={handleSubmit} />
-      <PokemonList pokemons={filteredPokemons} />
+      <PokemonForm handleForm={handleForm} types={types} />
+      <PokemonList pokemons={filteredPokemonList} />
     </div>
   );
 }
