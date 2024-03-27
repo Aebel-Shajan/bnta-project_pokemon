@@ -1,4 +1,5 @@
 import Pokemon from "./Pokemon";
+import './Pokemon.css';
 
 const PokemonList = ({pokemons}) => {
 
